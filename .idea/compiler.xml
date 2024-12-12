@@ -7,21 +7,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="service_paiement_multidevises" />
+        <module name="service_portefeuilles" />
+        <module name="service_cartes_virtuelles" />
+        <module name="service_depenses_budget" />
+        <module name="service_notifications" />
+        <module name="service_transactions" />
+        <module name="service_utilisateur" />
       </profile>
-      <profile name="Annotation profile for Bnakati_microservices" enabled="true">
+      <profile name="Annotation profile for Bankati_microservices" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.28/lombok-1.18.28.jar" />
         </processorPath>
-        <module name="service_paiement_multidevises" />
-        <module name="service_portefeuilles" />
-        <module name="service_depenses_budget" />
-        <module name="service_cartes_virtuelles" />
-        <module name="service_notifications" />
-        <module name="service_transactions" />
-        <module name="service_utilisateur" />
+        <module name="module_commun" />
       </profile>
     </annotationProcessing>
   </component>
