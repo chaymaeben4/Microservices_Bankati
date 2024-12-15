@@ -11,6 +11,7 @@
         <module name="service_portefeuilles" />
         <module name="service_cartes_virtuelles" />
         <module name="service_depenses_budget" />
+        <module name="api-gateway" />
         <module name="service_notifications" />
         <module name="service_transactions" />
         <module name="service_utilisateur" />
@@ -29,6 +30,10 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Bankati_microservices" options="" />
+      <module name="api-gateway" options="-parameters" />
+      <module name="eureka-server" options="" />
+      <module name="module_commun" options="" />
       <module name="service_cartes_virtuelles" options="-parameters" />
       <module name="service_depenses_budget" options="-parameters" />
       <module name="service_notifications" options="-parameters" />

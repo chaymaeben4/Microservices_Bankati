@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+
     <modules>
         <module>service_utilisateur</module>
         <module>service_transactions</module>
@@ -19,6 +20,7 @@
         <module>service_notifications</module>
         <module>module_commun</module>
         <module>eureka-server</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>
@@ -53,12 +55,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- Spring Boot Starter JPA -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <!-- Lombok -->

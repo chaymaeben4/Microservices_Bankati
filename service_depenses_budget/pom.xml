@@ -47,5 +47,10 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
             <version>4.2.0</version>
         </dependency>
+        <!-- Spring Boot Starter JPA -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
     </dependencies>
 </project>
