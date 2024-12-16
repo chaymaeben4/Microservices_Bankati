@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class NotificationDTO {
     private Long id;
-    private UtilisateurDTO utilisateur;
+    private Long utilisateurId;
     private String message;
     private NotificationType type; // EMAIL, SMS, PUSH
     private LocalDateTime date;

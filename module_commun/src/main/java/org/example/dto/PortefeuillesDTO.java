@@ -8,9 +8,9 @@ import java.util.List;
 @Data
 public class PortefeuillesDTO {
     private Long id;
-    private UtilisateurDTO utilisateur;
+    private Long utilisateurId;
     private Double balance;
     private Devise devise; // USD, MAD, EUR
-    private List<TransactionDTO> transactions_sortantes;
-    private List<TransactionDTO> transactions_entrantes;
+//    private List<TransactionDTO> transactions_sortantes;
+//    private List<TransactionDTO> transactions_entrantes;
 }

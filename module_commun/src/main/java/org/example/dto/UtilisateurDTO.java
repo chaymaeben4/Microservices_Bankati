@@ -12,7 +12,7 @@ public class UtilisateurDTO {
     private String prenom;
     private String email;
     private Role role; // CLIENT, AGENT, ADMIN
-    private List<PortefeuillesDTO> portefeuilles;
-    private List<CarteVirtuelleDTO> cartes_virtuelles;
-    private List<NotificationDTO> notifications;
+//    private List<PortefeuillesDTO> portefeuilles;
+//    private List<CarteVirtuelleDTO> cartes_virtuelles;
+//    private List<NotificationDTO> notifications;
 }

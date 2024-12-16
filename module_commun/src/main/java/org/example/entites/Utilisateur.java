@@ -25,6 +25,7 @@ public class Utilisateur {
     private String email;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role; // CLIENT, AGENT, ADMIN
 
     @Column(nullable = false)

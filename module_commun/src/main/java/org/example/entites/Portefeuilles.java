@@ -22,6 +22,7 @@ public class Portefeuilles {
     private Double balance;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Devise devise;
 
     @OneToMany(mappedBy = "destinateur", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
