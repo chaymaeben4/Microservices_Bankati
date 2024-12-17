@@ -30,13 +30,13 @@ public class Utilisateur {
     @Column(nullable = false)
     private String mdp;
 
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    private List<Portefeuilles> portefeuilles;
+    @Column(nullable = false)
+    private boolean isVerified = false; // Validation avec OTP
 
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    private List<CarteVirtuelle> virtualCards;
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Notification> notifications;
 }
+
+
 

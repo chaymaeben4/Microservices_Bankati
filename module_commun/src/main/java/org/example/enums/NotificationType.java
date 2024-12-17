@@ -1,7 +1,7 @@
 package org.example.enums;
 
 public enum NotificationType {
-    Email,
+    EMAIL,
     SMS,
     PUSH
 }
