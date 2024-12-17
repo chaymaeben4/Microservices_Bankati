@@ -12,5 +12,4 @@ public class ServicePortefeuillesApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServicePortefeuillesApplication.class, args);
     }
-
 }
