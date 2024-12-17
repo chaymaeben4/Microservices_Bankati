@@ -16,12 +16,14 @@ public class Portefeuilles {
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id", nullable = false)
+
     private Utilisateur utilisateur;
 
     @Column(nullable = false)
     private Double balance;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Devise devise;
 
     @OneToMany(mappedBy = "destinateur", cascade = CascadeType.ALL , fetch = FetchType.LAZY)

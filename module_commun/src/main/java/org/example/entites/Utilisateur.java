@@ -1,6 +1,7 @@
 package org.example.entites;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.example.enums.Role;
@@ -30,6 +31,7 @@ public class Utilisateur {
     @Column(nullable = false)
     private String mdp;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Portefeuilles> portefeuilles;
 
