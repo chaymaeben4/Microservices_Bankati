@@ -9,10 +9,10 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "utilisateurs")
-public class Utilisateur {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract  class Utilisateur {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)

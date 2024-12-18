@@ -14,8 +14,8 @@ public class CarteVirtuelle {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id", nullable = false)
-    private Utilisateur utilisateur;
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
     @Column(nullable = false, unique = true)
     private String numero_carte;

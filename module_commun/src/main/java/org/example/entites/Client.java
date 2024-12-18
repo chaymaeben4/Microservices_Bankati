@@ -2,6 +2,7 @@ package org.example.entites;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "clients")
+@EqualsAndHashCode(callSuper = true)
+
 public class Client extends Utilisateur {
 
     @Column(nullable = false)
@@ -25,7 +28,9 @@ public class Client extends Utilisateur {
     @Column(nullable = false)
     private String numeroTelephone;
 
-    @Column(unique = true, nullable = false)
+    @Column(
+//            unique = true,
+            nullable = false)
     private String numeroImmatriculationCommerce;
 
     @Column(nullable = false)
@@ -35,10 +40,10 @@ public class Client extends Utilisateur {
     private String pieceIdentite;
 
 
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Portefeuilles> portefeuilles;
 
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<CarteVirtuelle> virtualCards;
 
     // Autres attributs si nécessaire
