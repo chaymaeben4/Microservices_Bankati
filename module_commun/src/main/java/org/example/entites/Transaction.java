@@ -29,5 +29,22 @@ public class Transaction {
 
     @Column(nullable = false)
     private LocalDateTime date = LocalDateTime.now();
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+    public void setMontant(Double montant) {
+        this.montant = montant;
+    }
+
+    public Double getMontant() {
+        return this.montant;
+    }
+
+
 }
 

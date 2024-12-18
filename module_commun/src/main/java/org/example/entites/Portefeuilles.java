@@ -29,5 +29,7 @@ public class Portefeuilles {
 
     @OneToMany(mappedBy = "destinataire", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Transaction> Transactions_entrantes;
+
+
 }
 

@@ -12,7 +12,6 @@
         <module name="service_cartes_virtuelles" />
         <module name="service_depenses_budget" />
         <module name="service_notifications" />
-        <module name="service_transactions" />
         <module name="service_utilisateur" />
       </profile>
       <profile name="Annotation profile for Bankati_microservices" enabled="true">
@@ -23,6 +22,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.28/lombok-1.18.28.jar" />
         </processorPath>
         <module name="eureka-server" />
+        <module name="service_transactions" />
         <module name="module_commun" />
       </profile>
     </annotationProcessing>
@@ -34,7 +34,7 @@
       <module name="service_notifications" options="-parameters" />
       <module name="service_paiement_multidevises" options="-parameters" />
       <module name="service_portefeuilles" options="-parameters" />
-      <module name="service_transactions" options="-parameters" />
+      <module name="service_transactions" options="" />
       <module name="service_utilisateur" options="-parameters" />
     </option>
   </component>
