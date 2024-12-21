@@ -1,6 +1,5 @@
-package com.example.service_depenses_budget.entity;
+package com.example.service_portefeuilles.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

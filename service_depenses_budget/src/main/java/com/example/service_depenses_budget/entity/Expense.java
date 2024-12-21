@@ -1,30 +1,40 @@
 package com.example.service_depenses_budget.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.example.entites.Portefeuilles;
+import org.example.enums.Devise;
+
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId; // Identifiant de l'utilisateur (peut être une référence à un service utilisateur)
-
     private Double amount; // Montant de la dépense
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    @Enumerated(EnumType.STRING)
+    private Devise devise;
 
     private String description; // Description de la dépense
 
-    private LocalDate date; // Date de la dépense
+    private Date creationdate=new Date(); // Date de la dépense
 
-    @ManyToOne
-    @JoinColumn(name = "budget_id") // Relier la dépense à un budget
-    private Budget budget; // Budget auquel la dépense appartient
+    private Long portefeuilleId;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category; // Catégorie de la dépense
+
 
 }

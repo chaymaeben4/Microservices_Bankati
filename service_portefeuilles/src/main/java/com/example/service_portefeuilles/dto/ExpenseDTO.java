@@ -1,6 +1,6 @@
-package com.example.service_depenses_budget.dto;
+package com.example.service_portefeuilles.dto;
 
-import com.example.service_depenses_budget.entity.Category;
+import com.example.service_portefeuilles.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

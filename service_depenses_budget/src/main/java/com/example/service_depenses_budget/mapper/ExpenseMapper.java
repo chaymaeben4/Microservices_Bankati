@@ -2,7 +2,6 @@ package com.example.service_depenses_budget.mapper;
 
 import com.example.service_depenses_budget.dto.BudgetDTO;
 import com.example.service_depenses_budget.dto.ExpenseDTO;
-import com.example.service_depenses_budget.entity.Budget;
 import com.example.service_depenses_budget.entity.Expense;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,5 +1,6 @@
 package com.example.service_portefeuilles.repository;
 
+import com.example.service_portefeuilles.dto.PortefeuilleDto;
 import org.example.entites.Portefeuilles;
 import org.example.enums.Devise;
 import org.springframework.data.jpa.repository.JpaRepository;

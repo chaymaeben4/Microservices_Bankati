@@ -1,11 +1,4 @@
-package com.example.service_depenses_budget.entity;
-
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Data;
+package com.example.service_portefeuilles.model;
 
 
 public enum Category {
