@@ -2,6 +2,7 @@ package org.example.dto;
 
 
 import lombok.Data;
+import org.example.enums.Devise;
 
 import java.time.LocalDate;
 
@@ -13,5 +14,8 @@ public class CarteVirtuelleDTO {
     private String cvv;
     private LocalDate date_expiration;
     private Double limite;
+
+    private Devise devise;
+    private String status ;
 }
 

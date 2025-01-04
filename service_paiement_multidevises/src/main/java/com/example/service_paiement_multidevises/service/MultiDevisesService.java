@@ -1,5 +1,6 @@
 package com.example.service_paiement_multidevises.service;
 
+import com.example.service_paiement_multidevises.mapper.CarteVirtuelleMapper;
 import com.example.service_paiement_multidevises.mapper.PortefeuillesMapper;
 import com.example.service_paiement_multidevises.mapper.TransactionMapper;
 import com.example.service_paiement_multidevises.repository.PortefeuillesRepository;
@@ -9,8 +10,11 @@ import org.example.dto.PortefeuillesDTO;
 import org.example.entites.Portefeuilles;
 import org.example.entites.Transaction;
 import org.example.dto.TransactionDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class MultiDevisesService {
@@ -29,6 +33,9 @@ public class MultiDevisesService {
     @Autowired
     private TransactionMapper transactionMapper;
 
+
+    @Autowired
+    private CarteVirtuelleMapper carteVirtuelleMapper;
     @Transactional
     public TransactionDTO processPayment(Long senderWalletId, Long receiverWalletId, Double amount) {
         System.out.println("hello");
@@ -86,4 +93,16 @@ public class MultiDevisesService {
         // Map the transaction to TransactionDTO
         return transactionDTO;
     }
+
+    public Double getMontant(Long portefeuillesId){
+        return portefeuillesRepository.findBalanceById(portefeuillesId);
+    }
+
+
+    public PortefeuillesDTO getPortefeuilles(Long portefeuillesId){
+        return portefeuillesMapper.toDTO(portefeuillesRepository.findById(portefeuillesId).orElseThrow(() -> new RuntimeException("Portefeuille not found")));
+    }
+
+
+
 }
