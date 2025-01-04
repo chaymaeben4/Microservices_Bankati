@@ -21,6 +21,7 @@ public class PaymentController {
                                       @PathVariable Double amount) {
         return paymentService.processPayment(senderWalletId, receiverWalletId, amount);
     }
+
 }
 
 

@@ -1,25 +1,25 @@
 package com.example.cmi.client;
 
 
-import com.example.cmi.dto.PortefeuilleDTO;
+import com.example.cmi.dto.PortefeuilleDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "service-portefeuilles", url = "http://localhost:8086/api/portefeuilles")
 @Component
 public interface PortefeuilleClient {
     @GetMapping("/{id}")
-    PortefeuilleDTO getPortefeuilleById(@PathVariable("id") Long id);
+    PortefeuilleDto getPortefeuilleById(@PathVariable("id") Long id);
 
-    @PutMapping("/{id}/{amount}")
-    void updatePortefeuille(@PathVariable("id") Long portefeuilleId, @PathVariable("amount") Double amount);
-
+    @PutMapping("/crediter/{id}/{amount}")
+    String crediterPortefeuille(@PathVariable Long id, @PathVariable Double amount);
     @PutMapping("{id}/{amount}")
     String debitPortefeuille(@PathVariable Long id, @PathVariable Double amount) ;
 
+    @PostMapping("/creer")
+    public String creerPortefeuille(@RequestBody PortefeuilleDto request);
 
 //    @PutMapping("/{id}/debit")
 //    void debitPortefeuille(@PathVariable("id") Long portefeuilleId, @RequestParam("amount") Double amount);

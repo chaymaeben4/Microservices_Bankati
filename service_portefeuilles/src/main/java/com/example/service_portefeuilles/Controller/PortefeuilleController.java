@@ -2,10 +2,10 @@ package com.example.service_portefeuilles.Controller;
 
 import com.example.service_portefeuilles.dto.*;
 import com.example.service_portefeuilles.model.Alert;
+import com.example.service_portefeuilles.model.Portefeuille;
 import com.example.service_portefeuilles.service.PortefeuilleService;
 import lombok.AllArgsConstructor;
 import org.example.dto.PortefeuillesDTO;
-import org.example.entites.Portefeuilles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +39,12 @@ public class PortefeuilleController {
     }
 
     //creation d'un nouveau portefeuille
-//    @PostMapping("/creer")
-//    public ResponseEntity<String> creerPortefeuille(@RequestBody CreationPortefeuilleRequestDto request) {
-//        String message = portefeuilleService.creerPortefeuille(request);
-//        return ResponseEntity.ok(message);
-//    }
+    @PostMapping("/creer")
+    public ResponseEntity<String> creerPortefeuille(@RequestBody PortefeuilleDto request) {
+        portefeuilleService.creerPortefeuille(request);
+        return ResponseEntity.ok("Portefeuille créé avec succès !");
+    }
+
 
     //Alimenter un portefeuille depuis un compte bancaire ici mange le exchange
 //    @PostMapping("/alimenter")
@@ -70,6 +71,17 @@ public class PortefeuilleController {
         try {
             portefeuilleService.debitPortefeuille(id, amount);
             return ResponseEntity.ok("Montant débité avec succès");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @PutMapping("/crediter/{id}/{amount}")
+    public ResponseEntity<String> crediterPortefeuille(
+            @PathVariable Long id,
+            @PathVariable Double amount) {
+        try {
+            portefeuilleService.creditPortefeuille(id, amount);
+            return ResponseEntity.ok("Montant crédité avec succès");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -4,9 +4,10 @@ import com.example.service_portefeuilles.client.ExpenseClient;
 import com.example.service_portefeuilles.dto.*;
 import com.example.service_portefeuilles.maper.PortefeuilleMapper;
 import com.example.service_portefeuilles.model.Alert;
+import com.example.service_portefeuilles.model.Portefeuille;
 import com.example.service_portefeuilles.repository.PortefeuilleRepository;
 import lombok.AllArgsConstructor;
-import org.example.entites.Portefeuilles;
+import org.example.dto.PortefeuillesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,10 @@ public class PortefeuilleService {
     @Autowired
     private ExpenseClient expenseClient;
 
+    public Portefeuille creerPortefeuille(PortefeuilleDto portefeuilles){
+        return this.portefeuilleRepository.save(mapper.toEntity(portefeuilles));
+    }
+
     public List<PortefeuilleDto> recupererPortefeuillesEtDépensesParUtilisateur(Long utilisateurId) {
         return portefeuilleRepository.findByUtilisateurId(utilisateurId)
                 .stream()
@@ -54,7 +59,7 @@ public class PortefeuilleService {
     }
 
     public SoldeResponseDto consulterSolde(Long portefeuilleId) {
-        Portefeuilles portefeuille = portefeuilleRepository.findById(portefeuilleId)
+        Portefeuille portefeuille = portefeuilleRepository.findById(portefeuilleId)
                 .orElseThrow(() -> new RuntimeException("Portefeuille non trouvé !"));
         return new SoldeResponseDto(portefeuille.getBalance(), portefeuille.getDevise());
     }
@@ -113,8 +118,8 @@ public class PortefeuilleService {
     }
 
     @Transactional
-    public Portefeuilles debitPortefeuille(Long portefeuilleId, Double amount) {
-        Portefeuilles portefeuille = portefeuilleRepository.findById(portefeuilleId)
+    public Portefeuille debitPortefeuille(Long portefeuilleId, Double amount) {
+        Portefeuille portefeuille = portefeuilleRepository.findById(portefeuilleId)
                 .orElseThrow(() -> new RuntimeException("Portefeuille introuvable"));
 
         if (portefeuille.getBalance() < amount) {
@@ -127,8 +132,8 @@ public class PortefeuilleService {
 
 
     @Transactional
-    public Portefeuilles creditPortefeuille(Long portefeuilleId, Double amount) {
-        Portefeuilles portefeuille = portefeuilleRepository.findById(portefeuilleId)
+    public Portefeuille creditPortefeuille(Long portefeuilleId, Double amount) {
+        Portefeuille portefeuille = portefeuilleRepository.findById(portefeuilleId)
                 .orElseThrow(() -> new RuntimeException("Portefeuille introuvable"));
 
         portefeuille.setBalance(portefeuille.getBalance() + amount);
@@ -139,7 +144,7 @@ public class PortefeuilleService {
     @Transactional
     public Alert alimenterDepenseExistante(Long portefeuilleId, Long depenseId, Double montantSupplementaire) {
         // Récupérer le portefeuille
-        Portefeuilles portefeuille = portefeuilleRepository.findById(portefeuilleId)
+        Portefeuille portefeuille = portefeuilleRepository.findById(portefeuilleId)
                 .orElseThrow(() -> new RuntimeException("Portefeuille introuvable"));
 
         // Vérifier que le solde du portefeuille est suffisant
