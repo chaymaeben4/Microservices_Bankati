@@ -31,7 +31,7 @@ public class Transaction {
     private LocalDateTime date = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "carte_virtuelle_id", nullable = false)
+    @JoinColumn(name = "carte_virtuelle_id")
     private CarteVirtuelle carteVirtuelle;
 }
 

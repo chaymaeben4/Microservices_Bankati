@@ -16,6 +16,7 @@ import org.example.enums.Devise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -108,6 +109,7 @@ public class MultiDevisesService {
         return portefeuillesMapper.toDTO(portefeuillesRepository.findById(portefeuillesId).orElseThrow(() -> new RuntimeException("Portefeuille not found")));
     }
 
+
     public String processPaymentWithVirtualCard(String cvv, String toCurrency, Double amount) {
         // 1. Vérification des détails de la carte virtuelle
         CarteVirtuelleDTO carteVirtuelle = carteVirtuelleClient.getCarteByCvv(cvv);
@@ -117,13 +119,15 @@ public class MultiDevisesService {
         }
 
         // 2. Conversion de devise si nécessaire
-        Double convertedAmount = amount;
+        BigDecimal convertedAmount = BigDecimal.valueOf(amount);
         if (!carteVirtuelle.getDevise().equals(toCurrency)) {
             Double exchangeRate = exchangeRateService.getExchangeRate(carteVirtuelle.getDevise(), Devise.valueOf(toCurrency));
-            convertedAmount = amount * exchangeRate;
+            BigDecimal exchangeRateBigDecimal = BigDecimal.valueOf(exchangeRate);
+            convertedAmount = convertedAmount.multiply(exchangeRateBigDecimal);
         }
 
         Long cardId = carteVirtuelleClient.getCardIdByCvv(cvv);
+
         // 3. Débiter le montant de la carte virtuelle
         carteVirtuelleClient.debitCard(cardId, amount);
 
