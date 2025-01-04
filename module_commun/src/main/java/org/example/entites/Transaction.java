@@ -1,5 +1,6 @@
 package org.example.entites;
 
+import aj.org.objectweb.asm.commons.Remapper;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -33,5 +34,7 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "carte_virtuelle_id")
     private CarteVirtuelle carteVirtuelle;
+
+
 }
 

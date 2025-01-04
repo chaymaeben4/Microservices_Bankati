@@ -1,9 +1,13 @@
 package com.example.service_cartes_virtuelles.service;
 
 import com.example.service_cartes_virtuelles.mapper.CarteVirtuelleMapper;
+import com.example.service_cartes_virtuelles.mapper.TransactionMapper;
 import com.example.service_cartes_virtuelles.repo.CarteVirtuelleRepository;
+import com.example.service_cartes_virtuelles.repo.TransactionRepository;
 import org.example.dto.CarteVirtuelleDTO;
+import org.example.dto.TransactionDTO;
 import org.example.entites.CarteVirtuelle;
+import org.example.entites.Transaction;
 import org.example.enums.Devise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +31,15 @@ public class CarteVirtuelleService {
 
     @Autowired
     private CarteVirtuelleMapper carteVirtuelleMapper;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
+    private ExchangeRateService exchangeRateService;
+
+    @Autowired
+    private TransactionMapper transactionMapper;
 
     private static final String ALGORITHM = "AES";
     private static final String SECRET_KEY = "1234567890abcdef1234567890abcdef";
@@ -153,5 +167,68 @@ public class CarteVirtuelleService {
     public Long getCardIdByCvv(String cvv) {
         return carteVirtuelleRepository.findIdByCvv(cvv);
     }
+
+
+
+
+
+
+    public String processPaymentWithVirtualCard(String cvv, String toCurrency, Double amount) {
+        // 1. Vérification des détails de la carte virtuelle
+        CarteVirtuelleDTO carteVirtuelle = getCarteByCvv(cvv);
+
+        if (carteVirtuelle.getLimite() < amount) {
+            throw new RuntimeException("Fonds insuffisants sur la carte virtuelle");
+        }
+
+        // 2. Conversion de devise si nécessaire
+        Double convertedAmount = amount;
+        if (!carteVirtuelle.getDevise().equals(toCurrency)) {
+            Double exchangeRate = exchangeRateService.getExchangeRate(carteVirtuelle.getDevise(), Devise.valueOf(toCurrency));
+            convertedAmount = amount * exchangeRate;
+        }
+
+        Long cardId = getCardIdByCvv(cvv);
+        // 3. Débiter le montant de la carte virtuelle
+        debitCard(cardId, amount);
+
+        // 4. Enregistrer la transaction
+        Transaction transaction = new Transaction();
+        transaction.setCarteVirtuelle(carteVirtuelleMapper.toEntity(carteVirtuelle)); // Conversion DTO en entité
+        transaction.setDestinateur(null); // Pas de portefeuille spécifique pour une carte virtuelle
+        transaction.setDestinataire(null); // Ajoutez un destinataire si applicable
+        transaction.setMontant(amount);
+        transaction.setStatus("COMPLETED");
+        transaction.setDate(LocalDateTime.now());
+
+        transactionRepository.save(transaction);
+
+        // 5. Retourner la confirmation
+        System.out.println("Transaction réussie : Montant converti = " + convertedAmount + " " + toCurrency);
+        return "Paiement réussi de " + convertedAmount + " " + toCurrency;
+    }
+
+
+
+    public List<TransactionDTO> getTransactionsByCarteVirtuelleId(String cvv) {
+        // Fetch the virtual card ID using the CVV
+        Long carteVirtuelleId = carteVirtuelleRepository.findIdByCvv(cvv);
+        System.out.println("id :" + carteVirtuelleId);
+
+        // Handle the case where no card is found
+        if (carteVirtuelleId == null) {
+            throw new RuntimeException("No virtual card found for the provided CVV: " + cvv);
+        }
+
+        // Ensure that findByCarteVirtuelleId returns a list of Transaction objects
+        List<Transaction> transactions = transactionRepository.findByCarteVirtuelleId(carteVirtuelleId);
+
+        // Fetch transactions and map them to DTOs using stream
+        return transactions.stream()
+                .map(TransactionMapper::toDTO)  // Assuming toDTO is a method to map Transaction to TransactionDTO
+                .collect(Collectors.toList());
+    }
+
+
 
 }

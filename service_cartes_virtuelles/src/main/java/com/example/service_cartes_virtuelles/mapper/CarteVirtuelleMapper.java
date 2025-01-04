@@ -5,7 +5,6 @@ import org.example.dto.PortefeuillesDTO;
 import org.example.entites.CarteVirtuelle;
 import org.example.entites.Portefeuilles;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Component;
 
 @Component("CartevirtuelleMapper")

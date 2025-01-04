@@ -1,9 +1,10 @@
-package com.example.service_paiement_multidevises.service;
+package com.example.service_cartes_virtuelles.service;
 
 import org.example.enums.Devise;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import java.util.Map;
 
 @Service

@@ -1,8 +1,10 @@
 package com.example.service_paiement_multidevises.controller;
 
 import com.example.service_paiement_multidevises.service.MultiDevisesService;
+import org.example.dto.CarteVirtuelleDTO;
 import org.example.dto.PortefeuillesDTO;
 import org.example.dto.TransactionDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,14 +48,11 @@ public class PaymentController {
     }
 
 
-    @PostMapping("/virtual-card/{cvv}")
-    public ResponseEntity<String> payWithVirtualCard(
-            @PathVariable String cvv,
-            @RequestParam String toCurrency,
-            @RequestParam Double amount) {
-        String result = paymentService.processPaymentWithVirtualCard(cvv, toCurrency, amount);
-        return ResponseEntity.ok(result);
-    }
+
+
+
+
+
 }
 
 

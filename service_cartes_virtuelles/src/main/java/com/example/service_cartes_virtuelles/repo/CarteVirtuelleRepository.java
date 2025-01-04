@@ -16,4 +16,7 @@ public interface CarteVirtuelleRepository extends JpaRepository<CarteVirtuelle, 
 
     @Query("SELECT c.id FROM CarteVirtuelle c WHERE c.cvv = :cvv")
     Long findIdByCvv(@Param("cvv") String cvv);
+
+
+
 }

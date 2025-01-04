@@ -1,12 +1,15 @@
 package com.example.service_cartes_virtuelles.controleur;
 
+import com.example.service_cartes_virtuelles.client.PaiementClient;
 import com.example.service_cartes_virtuelles.service.CarteVirtuelleService;
 import org.example.dto.CarteVirtuelleDTO;
+import org.example.dto.TransactionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +22,9 @@ public class CarteVirtuelleController {
 
     @Autowired
     private CarteVirtuelleService carteVirtuelleService;
+
+    @Autowired
+    private PaiementClient paiementClient;
 
     /**
      * Récupère toutes les cartes pour un utilisateur.
@@ -89,5 +95,22 @@ public class CarteVirtuelleController {
         return ResponseEntity.ok(id);
     }
 
+    @PostMapping("/virtual-card/{cvv}")
+    public ResponseEntity<String> payWithVirtualCard(
+            @PathVariable String cvv,
+            @RequestParam String toCurrency,
+            @RequestParam Double amount) {
+        String result = carteVirtuelleService.processPaymentWithVirtualCard(cvv, toCurrency, amount);
+        return ResponseEntity.ok(result);
+    }
 
+
+    @GetMapping("/virtual-card/{cvv}")
+    public ResponseEntity<List<TransactionDTO>> getTransactionsByVirtualCard(@PathVariable String cvv) {
+
+            // Call the service method to fetch transactions
+            List<TransactionDTO> transactions = carteVirtuelleService.getTransactionsByCarteVirtuelleId(cvv);
+            return ResponseEntity.ok(transactions); // Return the result as JSON
+
+    }
 }
