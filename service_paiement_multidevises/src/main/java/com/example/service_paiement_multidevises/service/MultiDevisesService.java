@@ -1,7 +1,6 @@
 package com.example.service_paiement_multidevises.service;
 
 import com.example.service_paiement_multidevises.clients.CarteVirtuelleClient;
-import com.example.service_paiement_multidevises.mapper.CarteVirtuelleMapper;
 import com.example.service_paiement_multidevises.mapper.PortefeuillesMapper;
 import com.example.service_paiement_multidevises.mapper.TransactionMapper;
 import com.example.service_paiement_multidevises.repository.PortefeuillesRepository;
@@ -15,9 +14,6 @@ import org.example.dto.TransactionDTO;
 import org.example.enums.Devise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Service
 public class MultiDevisesService {
@@ -35,9 +31,6 @@ public class MultiDevisesService {
 
     @Autowired
     private TransactionMapper transactionMapper;
-
-    @Autowired
-    private CarteVirtuelleMapper carteVirtuelleMapper;
 
     @Autowired
     private CarteVirtuelleClient carteVirtuelleClient;
@@ -109,7 +102,6 @@ public class MultiDevisesService {
         return portefeuillesMapper.toDTO(portefeuillesRepository.findById(portefeuillesId).orElseThrow(() -> new RuntimeException("Portefeuille not found")));
     }
 
-
     public String processPaymentWithVirtualCard(String cvv, String toCurrency, Double amount) {
         // 1. Vérification des détails de la carte virtuelle
         CarteVirtuelleDTO carteVirtuelle = carteVirtuelleClient.getCarteByCvv(cvv);
@@ -119,31 +111,20 @@ public class MultiDevisesService {
         }
 
         // 2. Conversion de devise si nécessaire
-        BigDecimal convertedAmount = BigDecimal.valueOf(amount);
+        Double convertedAmount = amount;
         if (!carteVirtuelle.getDevise().equals(toCurrency)) {
             Double exchangeRate = exchangeRateService.getExchangeRate(carteVirtuelle.getDevise(), Devise.valueOf(toCurrency));
-            BigDecimal exchangeRateBigDecimal = BigDecimal.valueOf(exchangeRate);
-            convertedAmount = convertedAmount.multiply(exchangeRateBigDecimal);
+            convertedAmount = amount * exchangeRate;
         }
 
         Long cardId = carteVirtuelleClient.getCardIdByCvv(cvv);
-
         // 3. Débiter le montant de la carte virtuelle
         carteVirtuelleClient.debitCard(cardId, amount);
 
-        // 4. Enregistrer la transaction
-        Transaction transaction = new Transaction();
-        transaction.setCarteVirtuelle(carteVirtuelleMapper.toEntity(carteVirtuelle)); // Conversion DTO en entité
-        transaction.setDestinateur(null); // Pas de portefeuille spécifique pour une carte virtuelle
-        transaction.setDestinataire(null); // Ajoutez un destinataire si applicable
-        transaction.setMontant(amount);
-        transaction.setStatus("COMPLETED");
-        transaction.setDate(LocalDateTime.now());
-
-        transactionRepository.save(transaction);
-
-        // 5. Retourner la confirmation
+        // 4. Enregistrer la transaction (Optionnel)
+        // Exemple simple pour démonstration
         System.out.println("Transaction réussie : Montant converti = " + convertedAmount + " " + toCurrency);
+
         return "Paiement réussi de " + convertedAmount + " " + toCurrency;
     }
 

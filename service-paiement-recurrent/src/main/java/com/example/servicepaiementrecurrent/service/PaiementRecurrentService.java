@@ -4,10 +4,13 @@ import com.example.servicepaiementrecurrent.clients.CarteVirtuelleClient;
 import com.example.servicepaiementrecurrent.mapper.PaiementMapper;
 import com.example.servicepaiementrecurrent.repository.PaiementRecurrentRepository;
 import com.example.servicepaiementrecurrent.repository.UtilisateurRepository;
+import org.example.dto.CarteVirtuelleDTO;
 import org.example.dto.PaiementRecurrentDTO;
 import org.example.entites.PaiementRecurrent;
 import org.example.entites.Utilisateur;
+import org.example.enums.Devise;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -65,41 +68,43 @@ public class PaiementRecurrentService {
     }
 
     // Method to process recurring payment using virtual card
-//    public void processRecurringPaymentWithVirtualCard(Long paiementRecurrentId) {
-//        // Retrieve the payment record by its ID
-//        PaiementRecurrent paiementRecurrent = repository.findById(paiementRecurrentId)
-//                .orElseThrow(() -> new RuntimeException("Paiement récurrent non trouvé avec l'ID : " + paiementRecurrentId));
-//
-//        // Get the list of virtual cards for the user
-//        List<CarteVirtuelleDTO> cartes = client.getCartesByUser(paiementRecurrent.getUtilisateur().getId());
-//
-//        // Find the correct card based on the currency
-//        CarteVirtuelleDTO carte = findCardByCurrency(cartes, paiementRecurrent.getCurrency());
-//
-//        // If the card is found, process the payment
-//        if (carte != null) {
-//            // Debit the card with the specified amount
-//            client.debitCard(carte.getId(), paiementRecurrent.getAmount());
-//            System.out.println("Montant débité avec succès : " + paiementRecurrent.getAmount());
-//
-//            // Update the next execution date based on frequency
-//            LocalDate nextExecutionDate = calculateNextExecutionDate(paiementRecurrent.getNextExecutionDate(), paiementRecurrent.getFrequency());
-//            paiementRecurrent.setNextExecutionDate(nextExecutionDate);
-//
-//            // Save the updated payment record
-//            repository.save(paiementRecurrent);
-//        } else {
-//            throw new RuntimeException("Carte virtuelle non trouvée pour l'utilisateur avec la devise " + paiementRecurrent.getCurrency());
-//        }
-//    }
-//
-//    private CarteVirtuelleDTO findCardByCurrency(List<CarteVirtuelleDTO> cartes, String currency) {
-//        // Look for a card with the correct currency
-//        return cartes.stream()
-//                .filter(carte -> carte.getCurrency().equalsIgnoreCase(currency))
-//                .findFirst()
-//                .orElse(null);
-//    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void processRecurringPaymentWithVirtualCard(Long paiementRecurrentId) {
+        // Retrieve the payment record by its ID
+        PaiementRecurrent paiementRecurrent = repository.findById(paiementRecurrentId)
+                .orElseThrow(() -> new RuntimeException("Paiement récurrent non trouvé avec l'ID : " + paiementRecurrentId));
+
+        // Get the list of virtual cards for the user
+        List<CarteVirtuelleDTO> cartes = (List<CarteVirtuelleDTO>) client.getCartesParUtilisateur(paiementRecurrent.getUtilisateur().getId());
+
+        // Find the correct card based on the currency
+        CarteVirtuelleDTO carte = findCardByCurrency(cartes, paiementRecurrent.getCurrency());
+
+        // If the card is found, process the payment
+        if (carte != null) {
+            // Debit the card with the specified amount
+            client.debitCard(carte.getId(), paiementRecurrent.getAmount());
+            System.out.println("Montant débité avec succès : " + paiementRecurrent.getAmount());
+
+            // Update the next execution date based on frequency
+            LocalDate nextExecutionDate = calculateNextExecutionDate(paiementRecurrent.getNextExecutionDate(), paiementRecurrent.getFrequency());
+            paiementRecurrent.setNextExecutionDate(nextExecutionDate);
+
+            // Save the updated payment record
+            repository.save(paiementRecurrent);
+        } else {
+            throw new RuntimeException("Carte virtuelle non trouvée pour l'utilisateur avec la devise " + paiementRecurrent.getCurrency());
+        }
+    }
+
+    private CarteVirtuelleDTO findCardByCurrency(List<CarteVirtuelleDTO> cartes, Devise currency) {
+        // Look for a card with the correct currency
+        return cartes.stream()
+                .filter(carte -> carte.getDevise().equals(currency))
+                .findFirst()
+                .orElse(null);
+    }
 
 
 }
