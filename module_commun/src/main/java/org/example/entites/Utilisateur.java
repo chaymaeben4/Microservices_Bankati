@@ -41,5 +41,8 @@ public class Utilisateur {
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Notification> notifications;
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PaiementRecurrent> paiementsRecurrents;
 }
 

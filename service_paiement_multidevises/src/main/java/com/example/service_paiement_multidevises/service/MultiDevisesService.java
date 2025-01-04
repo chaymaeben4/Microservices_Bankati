@@ -1,16 +1,22 @@
 package com.example.service_paiement_multidevises.service;
 
+import com.example.service_paiement_multidevises.clients.CarteVirtuelleClient;
+import com.example.service_paiement_multidevises.mapper.CarteVirtuelleMapper;
 import com.example.service_paiement_multidevises.mapper.PortefeuillesMapper;
 import com.example.service_paiement_multidevises.mapper.TransactionMapper;
 import com.example.service_paiement_multidevises.repository.PortefeuillesRepository;
 import com.example.service_paiement_multidevises.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
+import org.example.dto.CarteVirtuelleDTO;
 import org.example.dto.PortefeuillesDTO;
 import org.example.entites.Portefeuilles;
 import org.example.entites.Transaction;
 import org.example.dto.TransactionDTO;
+import org.example.enums.Devise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class MultiDevisesService {
@@ -28,6 +34,12 @@ public class MultiDevisesService {
 
     @Autowired
     private TransactionMapper transactionMapper;
+
+    @Autowired
+    private CarteVirtuelleMapper carteVirtuelleMapper;
+
+    @Autowired
+    private CarteVirtuelleClient carteVirtuelleClient;
 
     @Transactional
     public TransactionDTO processPayment(Long senderWalletId, Long receiverWalletId, Double amount) {
@@ -86,4 +98,49 @@ public class MultiDevisesService {
         // Map the transaction to TransactionDTO
         return transactionDTO;
     }
+
+    public Double getMontant(Long portefeuillesId){
+        return portefeuillesRepository.findBalanceById(portefeuillesId);
+    }
+
+
+    public PortefeuillesDTO getPortefeuilles(Long portefeuillesId){
+        return portefeuillesMapper.toDTO(portefeuillesRepository.findById(portefeuillesId).orElseThrow(() -> new RuntimeException("Portefeuille not found")));
+    }
+
+    public String processPaymentWithVirtualCard(String cvv, String toCurrency, Double amount) {
+        // 1. Vérification des détails de la carte virtuelle
+        CarteVirtuelleDTO carteVirtuelle = carteVirtuelleClient.getCarteByCvv(cvv);
+
+        if (carteVirtuelle.getLimite() < amount) {
+            throw new RuntimeException("Fonds insuffisants sur la carte virtuelle");
+        }
+
+        // 2. Conversion de devise si nécessaire
+        Double convertedAmount = amount;
+        if (!carteVirtuelle.getDevise().equals(toCurrency)) {
+            Double exchangeRate = exchangeRateService.getExchangeRate(carteVirtuelle.getDevise(), Devise.valueOf(toCurrency));
+            convertedAmount = amount * exchangeRate;
+        }
+
+        Long cardId = carteVirtuelleClient.getCardIdByCvv(cvv);
+        // 3. Débiter le montant de la carte virtuelle
+        carteVirtuelleClient.debitCard(cardId, amount);
+
+        // 4. Enregistrer la transaction
+        Transaction transaction = new Transaction();
+        transaction.setCarteVirtuelle(carteVirtuelleMapper.toEntity(carteVirtuelle)); // Conversion DTO en entité
+        transaction.setDestinateur(null); // Pas de portefeuille spécifique pour une carte virtuelle
+        transaction.setDestinataire(null); // Ajoutez un destinataire si applicable
+        transaction.setMontant(amount);
+        transaction.setStatus("COMPLETED");
+        transaction.setDate(LocalDateTime.now());
+
+        transactionRepository.save(transaction);
+
+        // 5. Retourner la confirmation
+        System.out.println("Transaction réussie : Montant converti = " + convertedAmount + " " + toCurrency);
+        return "Paiement réussi de " + convertedAmount + " " + toCurrency;
+    }
+
 }
