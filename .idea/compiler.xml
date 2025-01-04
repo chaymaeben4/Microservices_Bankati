@@ -26,12 +26,22 @@
         <module name="eureka-server" />
         <module name="module_commun" />
       </profile>
+      <profile name="Annotation profile for cmi" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="cmi" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Bankati_microservices" options="" />
       <module name="api-gateway" options="-parameters" />
+      <module name="cmi" options="-parameters" />
       <module name="eureka-server" options="" />
       <module name="module_commun" options="" />
       <module name="service_cartes_virtuelles" options="-parameters" />

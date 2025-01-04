@@ -21,6 +21,7 @@
         <module>module_commun</module>
         <module>eureka-server</module>
         <module>api-gateway</module>
+        <module>cmi</module>
     </modules>
 
     <properties>

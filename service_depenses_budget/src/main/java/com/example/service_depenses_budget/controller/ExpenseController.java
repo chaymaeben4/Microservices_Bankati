@@ -28,20 +28,6 @@ public class ExpenseController {
     @Autowired
     private PortefeuilleClient portefeuilleClient;
 
-    // Crée une nouvelle dépense
-//    @PostMapping
-//    public ResponseEntity<ExpenseDTO> createExpense(@RequestBody ExpenseDTO expenseDTO) {
-//        ExpenseDTO createdExpense = expenseService.createExpense(expenseDTO);
-//        return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
-//    }
-
-
-    //la creation d'une expense depuis un portefeuille
-//    @PostMapping
-//    public ResponseEntity<ExpenseDTO> createExpense(@RequestBody ExpenseDTO expenseDTO) {
-//        ExpenseDTO createdExpense = expenseService.createExpense(expenseDTO);
-//        return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
-//    }
 
 
 
@@ -86,23 +72,12 @@ public class ExpenseController {
     }
 
 
-    // Met à jour une dépense existante
-//    @PutMapping("/{id}")
-//    public ResponseEntity<ExpenseDTO> updateExpense(@PathVariable Long id, @RequestBody ExpenseDTO expenseDTO) {
-//        ExpenseDTO updatedExpense = expenseService.updateExpense(id, expenseDTO);
-//        return new ResponseEntity<>(updatedExpense, HttpStatus.OK);
-//    }
-//
-//    // Supprime une dépense
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
-//        expenseService.deleteExpense(id);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
-    @PutMapping("/{depenseId}/alimenter/{montant}")
-    public boolean alimenterDepense(
+
+    @PutMapping("/{portefeuilleId}/{depenseId}/alimenter/{montant}")
+    public Alert alimenterDepense(
             @PathVariable Long depenseId,
-            @PathVariable Double montant) {
-        return expenseService.alimenterDepense(depenseId, montant);
+            @PathVariable Double montant,
+            @PathVariable Long portefeuilleId) {
+        return expenseService.alimenterDepense(depenseId, montant,portefeuilleId);
     }
 }

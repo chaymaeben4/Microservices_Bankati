@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.dto.PortefeuillesDTO;
+import org.example.entites.Portefeuilles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -149,17 +151,40 @@ public class ExpenseService {
     }
 
     @Transactional
-    public boolean alimenterDepense(Long depenseId, Double montantSupplementaire) {
+    public Alert alimenterDepense(Long depenseId, Double montantSupplementaire, Long portefeuilleId) {
         // Récupérer la dépense
         Expense expense = expenseRepository.findById(depenseId)
                 .orElseThrow(() -> new RuntimeException("Dépense introuvable"));
 
-        // Mettre à jour le montant
+        // Récupérer le portefeuille
+        PortefeuilleDTO portefeuilles = portefeuilleClient.getPortefeuilleById(portefeuilleId);
+
+        // Vérifier si le solde est suffisant
+        if (portefeuilles.getBalance() < montantSupplementaire) {
+            return new Alert(
+                    "Solde insuffisant dans le portefeuille",
+                    LocalDate.now(),
+                    false
+            );
+        }
+
+        // Mettre à jour le montant de la dépense
         expense.setAmount(expense.getAmount() + montantSupplementaire);
+
+        // Sauvegarder la dépense
+
         expenseRepository.save(expense);
 
-        return true;
+        // Mettre à jour le solde du portefeuille (supposons une méthode pour cela)
+        portefeuilleClient.debitPortefeuille(portefeuilleId,montantSupplementaire);
+
+        return new Alert(
+                "Dépense alimentée avec succès",
+                LocalDate.now(),
+                true
+        );
     }
+
 
 
 }

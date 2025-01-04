@@ -1,9 +1,10 @@
-package org.example.entites;
+package com.example.cmi.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.entites.Utilisateur;
 import org.example.enums.Devise;
 
 @Entity

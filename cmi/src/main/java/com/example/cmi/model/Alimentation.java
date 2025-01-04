@@ -1,10 +1,9 @@
-package com.example.service_portefeuilles.model;
+package com.example.cmi.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.entites.CompteBancaire;
 import org.example.entites.Portefeuilles;
 
 import java.time.LocalDateTime;

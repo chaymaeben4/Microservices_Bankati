@@ -1,4 +1,4 @@
-package com.example.service_portefeuilles.dto;
+package com.example.cmi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
