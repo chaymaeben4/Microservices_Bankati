@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class CmiService {
@@ -124,5 +125,16 @@ public class CmiService {
         return montant * taux;
     }
 
+
+    public CompteBancaire assignerUtilisateur(String numeroCompte, Long utilisateurId) {
+        Optional<CompteBancaire> compteOpt = compteBancaireRepository.findByNumeroCompte(numeroCompte);
+        if (compteOpt.isPresent()) {
+            CompteBancaire compte = compteOpt.get();
+            compte.setUtilisateurId(utilisateurId);
+            return compteBancaireRepository.save(compte);
+        } else {
+            throw new RuntimeException("Compte bancaire non trouvé avec l'ID : " + numeroCompte);
+        }
+    }
 
 }
