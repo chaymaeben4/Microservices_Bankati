@@ -42,7 +42,7 @@ public class ExchangeRateService {
         if (!rates.containsKey(toCurrencyString)) {
             throw new RuntimeException("Devise cible non trouvée dans les taux de conversion");
         }
-
+        System.out.println("rates : "  +rates);
         // Convertir la valeur de la devise cible en Double
         Object rate = rates.get(toCurrencyString);
         if (rate instanceof Integer) {

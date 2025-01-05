@@ -25,8 +25,6 @@ public class PaymentController {
         return paymentService.processPayment(senderWalletId, receiverWalletId, amount);
     }
 
-<<<<<<< HEAD
-=======
     @GetMapping("/{id}/balance")
     public ResponseEntity<Double> getBalance(@PathVariable Long id) {
         Double balance = paymentService.getMontant(id);
@@ -55,7 +53,7 @@ public class PaymentController {
 
 
 
->>>>>>> chaymae2
+
 }
 
 
