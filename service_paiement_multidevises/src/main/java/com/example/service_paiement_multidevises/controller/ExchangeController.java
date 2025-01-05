@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/exchange")
-public class ExchabgeController {
+public class ExchangeController {
 
 
     @Autowired

@@ -40,18 +40,13 @@ public class PortefeuilleController {
 
     //creation d'un nouveau portefeuille
     @PostMapping("/creer")
-    public ResponseEntity<String> creerPortefeuille(@RequestBody PortefeuilleDto request) {
-        portefeuilleService.creerPortefeuille(request);
-        return ResponseEntity.ok("Portefeuille créé avec succès !");
+    public ResponseEntity<Alert> creerPortefeuille(@RequestBody CreationPortefeuilleRequestDto request) {
+        Alert result=portefeuilleService.creerPortefeuille(request);
+        System.out.println("--------------------------------");
+        System.out.println(result);
+        System.out.println("--------------------------------");
+        return ResponseEntity.ok(result);
     }
-
-
-    //Alimenter un portefeuille depuis un compte bancaire ici mange le exchange
-//    @PostMapping("/alimenter")
-//    public ResponseEntity<String> alimenterPortefeuille(@RequestBody DemandeAlimentationDto request) throws Exception{
-//        String message= portefeuilleService.rechargerPortefeuille(request);
-//        return ResponseEntity.ok(message);
-//    }
 
 
 

@@ -4,6 +4,7 @@ import org.example.enums.Devise;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import java.util.Map;
 
 @Service
@@ -28,7 +29,6 @@ public class ExchangeRateService {
 
         // Construire l'URL avec la devise de base
         String url = apiUrl + fromCurrencyString + "?apikey=" + apiKey;
-        System.out.println("url: " + url);
 
         // Appeler l'API pour récupérer les taux
         Map<String, Object> response = restTemplate.getForObject(url, Map.class);
@@ -37,16 +37,22 @@ public class ExchangeRateService {
         }
 
         // Extraire les taux de conversion
-        Map<String, Double> rates = (Map<String, Double>) response.get("conversion_rates");
-        System.out.println("rates: " + rates);
+        Map<String, Object> rates = (Map<String, Object>) response.get("conversion_rates");
 
         // Vérifier que la devise cible existe dans les taux de conversion
         if (!rates.containsKey(toCurrencyString)) {
             throw new RuntimeException("Devise cible non trouvée dans les taux de conversion");
         }
-        System.out.println("rate : " + rates.get(toCurrencyString));
-        return rates.get(toCurrencyString);
+
+        // Convertir la valeur de la devise cible en Double
+        Object rate = rates.get(toCurrencyString);
+        if (rate instanceof Integer) {
+            return ((Integer) rate).doubleValue();
+        } else if (rate instanceof Double) {
+            return (Double) rate;
+        } else {
+            throw new RuntimeException("Type de taux de change non pris en charge : " + rate.getClass());
+        }
     }
 
 }
-

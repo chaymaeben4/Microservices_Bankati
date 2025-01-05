@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,9 +36,9 @@ public class PortefeuilleService {
     @Autowired
     private ExpenseClient expenseClient;
 
-    public Portefeuille creerPortefeuille(PortefeuilleDto portefeuilles){
-        return this.portefeuilleRepository.save(mapper.toEntity(portefeuilles));
-    }
+//    public Portefeuille creerPortefeuille(PortefeuilleDto portefeuilles){
+//        return this.portefeuilleRepository.save(mapper.toEntity(portefeuilles));
+//    }
 
     public List<PortefeuilleDto> recupererPortefeuillesEtDépensesParUtilisateur(Long utilisateurId) {
         return portefeuilleRepository.findByUtilisateurId(utilisateurId)
@@ -65,18 +66,21 @@ public class PortefeuilleService {
     }
 
 
-//    public String creerPortefeuille(CreationPortefeuilleRequestDto request) {
-//        if(portefeuilleRepository.findByUtilisateurIdAndDevise(request.getUtilisateurId(), request.getDevise()).isPresent()){
-//            return "Un portefeuille existe déjà pour cet utilisateur et cette devise.";
-//        }
-//        Portefeuilles portefeuille = new Portefeuilles();
-//        portefeuille.setUtilisateur(utilisateurService.findById(request.getUtilisateurId()));
-//        portefeuille.setDevise(request.getDevise());
-//        portefeuille.setBalance(request.getBalanceInitiale());
-//        portefeuilleRepository.save(portefeuille);
-//
-//        return "Portefeuille créé avec succès avec la devise " + request.getDevise();
-//    }
+    public Alert creerPortefeuille(CreationPortefeuilleRequestDto request) {
+        Optional<Portefeuille> existingPortefeuille = portefeuilleRepository.findByUtilisateurIdAndDevise(request.getutilisateurId(), request.getDevise());
+
+        if (existingPortefeuille.isPresent()) {
+            return new Alert("Un portefeuille existe déjà pour cet utilisateur et cette devise.",LocalDate.now(), false);
+        }
+
+        Portefeuille portefeuille = new Portefeuille();
+        portefeuille.setUtilisateurId(request.getutilisateurId());
+        portefeuille.setDevise(request.getDevise());
+        portefeuille.setBalance(request.getBalanceInitiale());
+        portefeuilleRepository.save(portefeuille);
+
+        return new Alert("Portefeuille créé avec succès avec la devise " + request.getDevise(),LocalDate.now(), true);
+    }
 
 
 //    public String rechargerPortefeuille(DemandeAlimentationDto request) throws Exception {
