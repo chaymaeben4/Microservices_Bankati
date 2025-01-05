@@ -9,14 +9,24 @@
         <outputRelativeToContentRoot value="true" />
         <module name="service_paiement_multidevises" />
         <module name="service_portefeuilles" />
-        <module name="service_cartes_virtuelles" />
+        <module name="service-paiement-recurrent" />
         <module name="service_depenses_budget" />
+        <module name="service_cartes_virtuelles" />
         <module name="api-gateway" />
         <module name="service_notifications" />
         <module name="service_transactions" />
         <module name="service_utilisateur" />
       </profile>
-      <profile name="Annotation profile for Bankati_microservices" enabled="true">
+      <profile name="Annotation profile for module_commun" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.28/lombok-1.18.28.jar" />
+        </processorPath>
+        <module name="module_commun" />
+      </profile>
+      <profile name="Annotation profile for eureka-server" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -24,9 +34,8 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.28/lombok-1.18.28.jar" />
         </processorPath>
         <module name="eureka-server" />
-        <module name="module_commun" />
       </profile>
-      <profile name="Annotation profile for cmi" enabled="true">
+      <profile name="Annotation profile for Bankati_microservices" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -44,6 +53,7 @@
       <module name="cmi" options="-parameters" />
       <module name="eureka-server" options="" />
       <module name="module_commun" options="" />
+      <module name="service-paiement-recurrent" options="-parameters" />
       <module name="service_cartes_virtuelles" options="-parameters" />
       <module name="service_depenses_budget" options="-parameters" />
       <module name="service_notifications" options="-parameters" />

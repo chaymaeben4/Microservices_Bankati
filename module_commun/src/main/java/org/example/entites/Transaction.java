@@ -1,5 +1,6 @@
 package org.example.entites;
 
+import aj.org.objectweb.asm.commons.Remapper;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,11 +15,11 @@ public class Transaction {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "destinateur_id", nullable = false)
+    @JoinColumn(name = "destinateur_id")
     private Portefeuilles destinateur;
 
     @ManyToOne
-    @JoinColumn(name = "destinataire_id", nullable = false)
+    @JoinColumn(name = "destinataire_id")
     private Portefeuilles destinataire;
 
     @Column(nullable = false)
@@ -29,5 +30,11 @@ public class Transaction {
 
     @Column(nullable = false)
     private LocalDateTime date = LocalDateTime.now();
+
+    @ManyToOne
+    @JoinColumn(name = "carte_virtuelle_id")
+    private CarteVirtuelle carteVirtuelle;
+
+
 }
 
