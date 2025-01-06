@@ -32,23 +32,16 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+                .csrf().disable() // Désactiver la protection CSRF si nécessaire
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll() // Permettre toutes les requêtes sans restriction
+                )
+                .formLogin().disable() // Désactiver le formulaire de connexion (si applicable)
+                .httpBasic().disable(); // Désactiver l'authentification HTTP Basic (si applicable)
 
         return http.build();
     }
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

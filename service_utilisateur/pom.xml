@@ -55,11 +55,6 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <!-- Spring Cloud Eureka Client -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>4.2.0</version>
-        </dependency>
 
     </dependencies>
 

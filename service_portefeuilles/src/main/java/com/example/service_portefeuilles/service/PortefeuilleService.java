@@ -1,4 +1,5 @@
 package com.example.service_portefeuilles.service;
+import com.example.service_portefeuilles.client.UserClient;
 import com.example.service_portefeuilles.dto.PortefeuilleDto;
 import com.example.service_portefeuilles.client.ExpenseClient;
 import com.example.service_portefeuilles.dto.*;
@@ -30,15 +31,13 @@ public class PortefeuilleService {
     private PortefeuilleMapper mapper;
 
     @Autowired
-    private UtilisateurService utilisateurService;
+    private UserClient userClient;
 //    @Autowired
 //    private AlimentationRepository alimentationRepository;
     @Autowired
     private ExpenseClient expenseClient;
 
-//    public Portefeuille creerPortefeuille(PortefeuilleDto portefeuilles){
-//        return this.portefeuilleRepository.save(mapper.toEntity(portefeuilles));
-//    }
+
 
     public List<PortefeuilleDto> recupererPortefeuillesEtDépensesParUtilisateur(Long utilisateurId) {
         return portefeuilleRepository.findByUtilisateurId(utilisateurId)
@@ -82,40 +81,6 @@ public class PortefeuilleService {
         return new Alert("Portefeuille créé avec succès avec la devise " + request.getDevise(),LocalDate.now(), true);
     }
 
-
-//    public String rechargerPortefeuille(DemandeAlimentationDto request) throws Exception {
-//
-//        // Récupérer le portefeuille
-//        Portefeuilles portefeuille = portefeuilleRepository.findById(request.getPortefeuilleId())
-//                .orElseThrow(() -> new Exception("Portefeuille introuvable"));
-//
-//        // Récupérer le compte bancaire
-//        CompteBancaire compteBancaire = compteBancaireRepository.findById(request.getCompteId())
-//                .orElseThrow(() -> new Exception("Compte bancaire introuvable"));
-//
-//        // Vérifier que le compte a suffisamment de solde
-//        if (compteBancaire.getSolde() < request.getMontant()) {
-//            return "Solde insuffisant sur le compte bancaire";
-//        }
-//
-//        // Déduire le montant du compte bancaire
-//        compteBancaire.setSolde(compteBancaire.getSolde() - request.getMontant());
-//        compteBancaireRepository.save(compteBancaire);
-//
-//        // Ajouter le montant au portefeuille
-//        portefeuille.setBalance(portefeuille.getBalance() + request.getMontant());
-//        portefeuilleRepository.save(portefeuille);
-//
-//        // Enregistrer la transaction
-//        Alimentation alimentation = new Alimentation();
-//        alimentation.setMontant(request.getMontant());
-//        alimentation.setDestinateur(compteBancaire);
-//        alimentation.setDestinataire(portefeuille);
-//        alimentationRepository.save(alimentation);
-//
-//        // Retourner un message de succès
-//        return "Le portefeuille a été rechargé avec succès avec un montant de " + request.getMontant() + " " + compteBancaire.getDevise();
-//    }
 
     public PortefeuilleDto getById(Long id){
         return mapper.toDTO(portefeuilleRepository.findById(id).get());

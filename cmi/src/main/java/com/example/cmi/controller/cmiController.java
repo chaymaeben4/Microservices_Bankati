@@ -27,9 +27,12 @@ public class cmiController {
         Alert response = cmiService.creerPortefeuille(request);
         return ResponseEntity.ok(response);
     }
-    @PutMapping("/{compteId}/assigner-utilisateur")
-    public ResponseEntity<CompteBancaire> assignerUtilisateur(@PathVariable String NRcompte, @RequestParam Long utilisateurId) {
-        CompteBancaire compteMisAJour = cmiService.assignerUtilisateur(NRcompte, utilisateurId);
-        return ResponseEntity.ok(compteMisAJour);
+    @PutMapping("/{compteId}/{utilisateurId}/assigner-utilisateur")
+    public boolean assignerUtilisateur(@PathVariable("compteId") String compteId, @PathVariable("utilisateurId") Long utilisateurId) {
+        System.out.println("Assignation du compte: " + compteId + " à l'utilisateur: " + utilisateurId);
+        boolean compteMisAJour = cmiService.assignerUtilisateur(compteId, utilisateurId);
+        System.out.println("Résultat de l'assignation: " + compteMisAJour);
+        return compteMisAJour;
     }
+
 }

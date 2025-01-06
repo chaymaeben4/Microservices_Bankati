@@ -18,5 +18,7 @@ public class RegisterUserDto {
     private String fullName;
     private Role role;
 
+    private String nrCompteBancaire;
+
     // getters and setters here...
 }

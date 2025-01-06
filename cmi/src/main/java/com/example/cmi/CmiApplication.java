@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = {"org.example.entites","com.example.cmi.model"})
 @EnableFeignClients
 @EnableJpaRepositories(basePackages = "com.example.cmi.repository")
-
 public class CmiApplication {
 
     public static void main(String[] args) {
