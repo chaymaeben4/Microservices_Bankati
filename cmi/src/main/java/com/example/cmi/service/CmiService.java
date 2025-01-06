@@ -29,8 +29,11 @@ public class CmiService {
     @Autowired
     private PortefeuilleClient portefeuilleClient;
 
+//    @Autowired
+//    private ExchangeClient exchangeClient;
+
     @Autowired
-    private ExchangeClient exchangeClient;
+    private ExchangeRateService exchangeRateService;
 
 
     @Transactional
@@ -119,7 +122,7 @@ public class CmiService {
 
     public Double convertirMontant(Devise from, Devise to, Double montant) {
         // Appeler le service distant pour obtenir le taux de conversion
-        Double taux = exchangeClient.getExchangeRate(from, to);
+        Double taux = exchangeRateService.getExchangeRate(from, to);
         System.out.println("tauuux"+taux);
         // Appliquer le taux de conversion
         return montant * taux;

@@ -111,6 +111,6 @@ public class CarteVirtuelleController {
             // Call the service method to fetch transactions
             List<TransactionDTO> transactions = carteVirtuelleService.getTransactionsByCarteVirtuelleId(cvv);
             return ResponseEntity.ok(transactions); // Return the result as JSON
-
     }
+
 }

@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 //@EnableDiscoveryClient
 @EnableFeignClients
-@EntityScan(basePackages = {"org.example.entites","com.example.service_portefeuilles.model"})
+@EntityScan(basePackages = {"com.example.service_portefeuilles.model"})
 public class ServicePortefeuillesApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServicePortefeuillesApplication.class, args);

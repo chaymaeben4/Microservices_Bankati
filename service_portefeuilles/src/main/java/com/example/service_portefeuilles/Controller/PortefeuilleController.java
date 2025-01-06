@@ -2,12 +2,9 @@ package com.example.service_portefeuilles.Controller;
 
 import com.example.service_portefeuilles.dto.*;
 import com.example.service_portefeuilles.model.Alert;
-import com.example.service_portefeuilles.model.Portefeuille;
 import com.example.service_portefeuilles.service.PortefeuilleService;
 import lombok.AllArgsConstructor;
-import org.example.dto.PortefeuillesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,6 +81,13 @@ public class PortefeuilleController {
     @PutMapping("/depense/alimenter")
     public Alert alimenterDepense(@RequestBody AlimentationExpenseRequest request) {
         return portefeuilleService.alimenterDepenseExistante(request.getPortefeuilleId(), request.getExpenseId(), request.getMontant());
+    }
+
+    @PostMapping("/payment/{senderWalletId}/{receiverWalletId}/{amount}")
+    public TransactionDTO makePayment(@PathVariable Long senderWalletId,
+                                      @PathVariable Long receiverWalletId,
+                                      @PathVariable Double amount) {
+        return portefeuilleService.processPayment(senderWalletId, receiverWalletId, amount);
     }
 }
 

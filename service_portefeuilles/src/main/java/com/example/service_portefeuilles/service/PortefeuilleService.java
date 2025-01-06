@@ -6,8 +6,13 @@ import com.example.service_portefeuilles.dto.*;
 import com.example.service_portefeuilles.maper.PortefeuilleMapper;
 import com.example.service_portefeuilles.model.Alert;
 import com.example.service_portefeuilles.model.Portefeuille;
+import com.example.service_portefeuilles.model.Transaction;
+import com.example.service_portefeuilles.model.TransactionMapper;
 import com.example.service_portefeuilles.repository.PortefeuilleRepository;
+import com.example.service_portefeuilles.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
+
+
 import org.example.dto.PortefeuillesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +41,15 @@ public class PortefeuilleService {
 //    private AlimentationRepository alimentationRepository;
     @Autowired
     private ExpenseClient expenseClient;
+
+    @Autowired
+    private ExchangeRateService exchangeRateService;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
+    private TransactionMapper transactionMapper;
 
 
 
@@ -134,4 +148,66 @@ public class PortefeuilleService {
 
         return new Alert("Dépense alimentée avec succès", LocalDate.now(), true);
     }
+
+
+
+    @Transactional
+    public TransactionDTO processPayment(Long senderWalletId, Long receiverWalletId, Double amount) {
+
+        // 1. Récupérer les portefeuilles source et cible
+        Portefeuille senderWallet = portefeuilleRepository.findById(senderWalletId)
+                .orElseThrow(() -> new RuntimeException("Sender wallet not found with id: " + senderWalletId));
+        System.out.println("senderWallet : "+senderWallet.getDevise());
+
+        Portefeuille receiverWallet = portefeuilleRepository.findById(receiverWalletId)
+                .orElseThrow(() -> new RuntimeException("Receiver wallet not found"));
+
+        System.out.println("receiverWallet : "+receiverWallet.getDevise());
+
+        // 2. Vérifier les fonds disponibles
+        if (senderWallet.getBalance() < amount) {
+            throw new RuntimeException("Insufficient funds");
+        }
+
+        // 3. Obtenir le taux de change
+        Double exchangeRate = exchangeRateService.getExchangeRate(
+                senderWallet.getDevise(),
+                receiverWallet.getDevise()
+        );
+
+        // 4. Calculer le montant converti
+        Double convertedAmount = amount * exchangeRate;
+
+        // 5. Débit et crédit des portefeuilles
+        senderWallet.setBalance(senderWallet.getBalance() - amount);
+        receiverWallet.setBalance(receiverWallet.getBalance() + convertedAmount);
+
+        portefeuilleRepository.save(senderWallet);
+        portefeuilleRepository.save(receiverWallet);
+
+        // 6. Enregistrer la transaction
+        Transaction transaction = new Transaction();
+        transaction.setDestinateur(senderWallet);
+        transaction.setDestinataire(receiverWallet);
+        transaction.setMontant(amount);
+        transaction.setStatus("COMPLETED");
+
+        // Save the transaction in the repository
+        transaction = transactionRepository.save(transaction);
+
+        // Map the Portefeuilles and Transaction to their DTOs
+        PortefeuilleDto senderWalletDTO = mapper.toDTO(senderWallet);
+        PortefeuilleDto receiverWalletDTO = mapper.toDTO(receiverWallet);
+
+        // Map the transaction to DTO
+        TransactionDTO transactionDTO = transactionMapper.toDTO(transaction);
+        transactionDTO.setDestinateurId(senderWalletDTO.getId());
+        transactionDTO.setDestinataireId(receiverWalletDTO.getId());
+
+        // Map the transaction to TransactionDTO
+        return transactionDTO;
+    }
+
+
+
 }

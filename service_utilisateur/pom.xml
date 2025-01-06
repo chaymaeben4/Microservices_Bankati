@@ -55,7 +55,11 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <!-- Spring Cloud Eureka Client -->
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

@@ -38,7 +38,6 @@ public class MultiDevisesService {
     private CarteVirtuelleMapper carteVirtuelleMapper;
     @Transactional
     public TransactionDTO processPayment(Long senderWalletId, Long receiverWalletId, Double amount) {
-        System.out.println("hello");
 
         // 1. Récupérer les portefeuilles source et cible
         Portefeuilles senderWallet = portefeuillesRepository.findById(senderWalletId)
